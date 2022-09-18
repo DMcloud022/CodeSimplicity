@@ -4,6 +4,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter/services.dart';
 import '../../search.dart';
 
@@ -23,6 +24,7 @@ class CPlusPlusNavPage extends StatefulWidget {
 }
 
 class _MyCPlusPlusNavPageState extends State<CPlusPlusNavPage> {
+  late YoutubePlayerController controller;
   static final expanded_text = '''
 #include <iostream>
 #include <cmath>
@@ -137,15 +139,29 @@ int main() {
     super.initState();
 
     const url = 'https://www.youtube.com/watch?v=ZzaPdXTrSb8';
+
+    controller = YoutubePlayerController(
+      initialVideoId: YoutubePlayer.convertUrlToId(url)!,
+      flags: const YoutubePlayerFlags(
+        mute: false,
+        loop: false,
+        autoPlay: false,
+        enableCaption: false,
+      ),
+    );
   }
 
   @override
   void deactivate() {
+    controller.pause();
+
     super.deactivate();
   }
 
   @override
   void dispose() {
+    controller.dispose();
+
     super.dispose();
   }
 
